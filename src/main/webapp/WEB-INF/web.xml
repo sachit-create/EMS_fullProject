@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>ECCS</display-name>
+  <welcome-file-list>
+  	<welcome-file>loginPage.xhtml</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>DisplayImage</display-name>
+    <servlet-name>DisplayImage</servlet-name>
+    <servlet-class>beans.DisplayImage</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DisplayImage</servlet-name>
+    <url-pattern>/DisplayImage</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <filter>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+    <servlet-name>Faces Servlet</servlet-name>
+  </filter-mapping>
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.xhtml</url-pattern>
+  </servlet-mapping>
+  <context-param>
+    <description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
+    <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    <param-value>server</param-value>
+  </context-param>
+  <context-param>
+    <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+    <param-value>resources.application</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.THEME</param-name>
+    <param-value>redmond</param-value>
+  </context-param>
+  
+  <!-- <filter>
+  <filter-name>MyFilter</filter-name>
+  <filter-class>schooldata.MyFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  <filter-name>MyFilter</filter-name>
+  <url-pattern>*.xhtml</url-pattern>
+  </filter-mapping>
+   -->
+  <listener>
+    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+  </listener>
+  <listener>
+    <listener-class>demoPro.MySqlCleanupListener</listener-class>
+  </listener>
+
+</web-app>

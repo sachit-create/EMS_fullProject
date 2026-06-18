@@ -1,0 +1,40 @@
+# Build output
+/build/
+/target/
+/bin/
+/out/
+*.class
+*.jar
+*.war
+
+# IDE / workspace metadata
+.project
+.classpath
+.settings/
+.metadata/
+.idea/
+.vscode/
+Servers/
+wtpwebapps/
+*.iml
+
+# Local config / secrets
+.env
+.env.*
+*.local
+src/main/webapp/WEB-INF/smtp.properties
+src/main/webapp/WEB-INF/admin.properties
+docker-compose.override.yml
+Dockerfile
+docker-compose.yml
+DEPLOYMENT_AWS.md
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

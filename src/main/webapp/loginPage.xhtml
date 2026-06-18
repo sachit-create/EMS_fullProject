@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+	<f:viewParam name="role" value="#{loginBean.loginFormRole}" />
+	<f:event type="preRenderView" listener="#{loginBean.redirectIfLoggedIn}" />
+</f:metadata>
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>Employee Portal Login</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</h:head>
+
+	<h:body class="bg-white min-h-screen flex items-center justify-center p-4 md:p-6 overflow-auto">
+		<div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+			<div class="border-2 border-green-400 rounded-[30px] md:rounded-[36px] p-6 md:p-10 shadow-md flex flex-col justify-center bg-white">
+				<h2 class="text-2xl md:text-3xl font-bold text-green-600">Employee Management</h2>
+				<p class="text-gray-600 mt-3 text-sm md:text-base">Choose how you want to sign in.</p>
+				<div class="mt-8 flex flex-col gap-4">
+					<h:link outcome="loginPage" 
+						styleClass="text-green-600 font-bold border-2 border-green-50 p-4 rounded-2xl hover:bg-green-50 transition-all flex justify-between items-center group">
+						<span>Are you an admin?</span>
+						<span class="group-hover:translate-x-1 transition-transform">→</span>
+						<f:param name="role" value="admin" />
+					</h:link>
+					<h:link outcome="loginPage"
+						styleClass="text-green-600 font-bold border-2 border-green-50 p-4 rounded-2xl hover:bg-green-50 transition-all flex justify-between items-center group">
+						<span>Are you an employee?</span>
+						<span class="group-hover:translate-x-1 transition-transform">→</span>
+						<f:param name="role" value="employee" />
+					</h:link>
+				</div>
+				<p class="text-gray-400 text-xs mt-8">
+					Admin uses username and password. Employee uses employee ID.
+				</p>
+			</div>
+
+			<div class="border-2 border-green-400 rounded-[30px] md:rounded-[36px] p-6 md:p-10 shadow-md flex flex-col justify-center bg-white">
+				<p:messages id="loginMessages" showDetail="true" closable="true" styleClass="mb-4" />
+
+				<h:panelGroup rendered="#{loginBean.loginFormRole ne 'employee'}">
+					<h:form class="flex flex-col gap-5">
+						<div class="flex items-center justify-between mb-2">
+							<h2 class="text-2xl md:text-3xl font-bold text-green-600">Admin Login</h2>
+							<h:link outcome="loginPage" value="Employee login"
+								styleClass="text-sm font-bold text-gray-400 hover:text-green-600 transition-colors">
+								<f:param name="role" value="employee" />
+							</h:link>
+						</div>
+						<p:inputText id="username" value="#{loginBean.username}"
+							placeholder="Username"
+							styleClass="shadow-none text-black w-full rounded-2xl border-black border-[1px] outline-none focus:shadow-none focus:outline-none  transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-xl px-5 py-4" />
+						<p:password id="password" value="#{loginBean.password}"
+							placeholder="Password" feedback="false"
+							styleClass="shadow-none text-black w-full rounded-2xl border-black border-[1px] outline-none focus:shadow-none focus:outline-none  transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-xl px-5 py-4" />
+						<p:commandButton value="Login as Admin" action="#{loginBean.loginAdmin}"
+							update="@form" ajax="false"
+							style="background:#4ade80;color:black;border:2px solid black;"
+							styleClass="rounded-2xl py-3 font-black text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none transition-all mt-4" />
+					</h:form>
+				</h:panelGroup>
+
+				<h:panelGroup rendered="#{loginBean.loginFormRole eq 'employee'}">
+					<h:form class="flex flex-col gap-5">
+						<div class="flex items-center justify-between mb-2">
+							<h2 class="text-2xl md:text-3xl font-bold text-green-600">Employee Login</h2>
+							<h:link outcome="loginPage" value="Admin login"
+								styleClass="text-sm font-bold text-gray-400 hover:text-green-600 transition-colors">
+								<f:param name="role" value="admin" />
+							</h:link>
+						</div>
+						<p:inputText id="employeeCode" value="#{loginBean.employeeCode}"
+							placeholder="Employee ID"
+							styleClass="shadow-none text-black w-full rounded-2xl border-black border-[1px] outline-none focus:shadow-none focus:outline-none  transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-xl px-5 py-4" />
+						<p:commandButton value="Login as Employee" action="#{loginBean.loginEmployee}"
+							update="@form" ajax="false"
+							style="background:#4ade80;color:black;border:2px solid black;"
+							styleClass="rounded-2xl py-3 font-black text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 active:shadow-none transition-all mt-4" />
+						<h:link outcome="forgotEmployeeId" value="Forgot employee ID?"
+							styleClass="text-center text-gray-400 text-sm font-bold hover:text-green-600 transition-colors mt-2" />
+					</h:form>
+				</h:panelGroup>
+			</div>
+		</div>
+	</h:body>
+</f:view>
+</html>

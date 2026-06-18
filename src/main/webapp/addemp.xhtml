@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+	<f:event type="preRenderView" listener="#{loginBean.ensureAdminLoggedIn}" />
+</f:metadata>
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<title>Add Employee</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<style>
+.employee-dropdown.ui-selectonemenu {
+	width: 100% !important;
+	border: 1px solid black !important;
+	border-radius: 16px !important;
+	background: white !important;
+	box-shadow: none !important;
+	overflow: hidden !important;
+	transition: transform .3s ease, box-shadow .3s ease !important;
+}
+
+.employee-dropdown.ui-selectonemenu:hover {
+	transform: scale(1.02);
+	box-shadow: 0 10px 15px -3px rgb(0 0 0/ 0.1), 0 4px 6px -4px
+		rgb(0 0 0/ 0.1);
+}
+
+.employee-dropdown .ui-selectonemenu-label {
+	background: white !important;
+	color: black !important;
+	border: none !important;
+	padding: 0.75rem 1rem !important;
+	line-height: 1.5rem !important;
+	font-size: 1rem !important;
+}
+
+.employee-dropdown .ui-selectonemenu-trigger {
+	width: 48px !important;
+	background: white !important;
+	border-left: 1px solid black !important;
+}
+
+.employee-dropdown .ui-icon {
+	color: black !important;
+}
+
+.ui-selectonemenu-panel {
+	border: 1px solid black !important;
+	border-radius: 16px !important;
+	overflow: hidden !important;
+	box-shadow: 0 10px 15px -3px rgb(0 0 0/ 0.1) !important;
+}
+
+.ui-selectonemenu-item {
+	background: white !important;
+	color: black !important;
+	padding: 0.75rem 1rem !important;
+}
+
+.ui-selectonemenu-item:hover {
+	background: #dcfce7 !important;
+}
+
+.ui-state-highlight {
+	background: #4ade80 !important;
+	color: black !important;
+}
+
+.ui-messages {
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+	background: transparent !important;
+}
+
+.ui-messages-info, .ui-messages-warn, .ui-messages-error,
+	.ui-messages-fatal {
+	background: transparent !important;
+	border: none !important;
+	color: #16a34a !important;
+	font-size: 12px !important;
+	font-weight: 500 !important;
+	padding: 2px 0 !important;
+	margin: 0 !important;
+}
+
+.ui-messages ul {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.ui-messages li {
+	list-style: none !important;
+	max-width: 20ch;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ui-messages-icon, .ui-messages-close {
+	display: none !important;
+}
+</style>
+	</h:head>
+
+	<h:body class="bg-white min-h-screen overflow-auto p-4 md:p-6">
+
+		<div class="min-h-full flex flex-col gap-6">
+
+		
+			<div
+				class="border-2 border-green-400 rounded-3xl md:rounded-full bg-white shadow-lg
+                   px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
+
+				<div class="text-xl md:text-2xl font-semibold text-green-600">Hello,
+					#{loginBean.displayName}</div>
+
+				<div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-base md:text-lg">
+
+					<h:link outcome="dashboard" value="Dashboard"
+						styleClass="hover:text-green-600 transition-colors" />
+
+
+					<h:link outcome="showEmployees" value="Show Employees"
+						styleClass="hover:text-green-600 transition-colors" />
+
+					<h:link outcome="addemp" value="Add Employee"
+						styleClass="hover:text-green-600 transition-colors" />
+
+					<h:form prependId="false">
+						<p:commandButton value="Logout" action="#{loginBean.logout}"
+							ajax="false" process="@this"
+							style="background:#4ade80;color:black;border:2px solid black;"
+							styleClass="rounded-full px-5 py-2
+                                   transition-transform duration-300 hover:scale-105" />
+					</h:form>
+
+				</div>
+
+			</div>
+
+			<!-- Center Area -->
+			<div class="flex-1 flex items-center justify-center">
+
+				<h:form id="employeeForm" enctype="multipart/form-data"
+					styleClass="border-2 border-green-400 rounded-[30px] md:rounded-[36px]
+               p-6 md:p-8 flex flex-col gap-5 w-full max-w-6xl
+                shadow-md hover:shadnow-xl hover:shadow-green-400 bg-white">
+
+					<div class="flex items-center justify-between gap-4 flex-wrap">
+						<div>
+							<h2 class="text-green-600 text-3xl md:text-4xl font-semibold">Add Employee</h2>
+							<p class="text-gray-500 text-sm md:text-base">Create a new employee record with photo and ID.</p>
+						</div>
+						<div class="text-xs md:text-sm text-gray-500">
+							Employee records stay on this screen only when you save.
+						</div>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+						<p:inputText id="employeeCode" value="#{emp.employeeCode}"
+							placeholder="Employee Code (auto-generated)"
+							styleClass="shadow-none text-black w-full rounded-2xl border-black border focus:outline-none focus:shadow-none transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl" />
+
+						<p:inputText id="name" value="#{emp.name}" required="true"
+							placeholder="Employee Name"
+							styleClass="shadow-none text-black w-full
+                       rounded-2xl border-black border
+                       focus:outline-none focus:shadow-none
+                       transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-xl" />
+
+						<p:inputText id="fatherName" value="#{emp.fatherName}"
+							required="true" placeholder="Father Name"
+							styleClass="shadow-none text-black w-full
+                       rounded-2xl border-black border
+                       focus:outline-none focus:shadow-none
+                       transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-xl" />
+
+						<p:inputText id="email" value="#{emp.email}" required="true"
+							placeholder="Employee Email"
+							styleClass="shadow-none text-black w-full rounded-2xl border-black border focus:outline-none focus:shadow-none transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl" />
+
+						<p:inputText id="salary" value="#{emp.salary}" required="true"
+							placeholder=" ₹ Salary"
+							styleClass="shadow-none text-black w-full rounded-2xl border-black border focus:outline-none focus:shadow-none transition-transform duration-300 hover:scale-[1.01] hover:shadow-xl" />
+
+						<p:fileUpload id="employeePhoto" value="#{emp.employeePhoto}"
+							mode="simple" accept="image/*"
+							label="Employee Photo"
+							styleClass="shadow-none text-black w-full
+                       rounded-2xl border-black border
+                       focus:outline-none focus:shadow-none
+                       transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-xl" />
+
+						<h:selectOneMenu id="gender" value="#{emp.gender}" required="true"
+							styleClass="shadow-none text-black w-full
+               rounded-2xl border-black border
+               px-4 py-3
+               bg-white
+               focus:outline-none
+               transition-transform duration-300
+               hover:scale-[1.01] hover:shadow-xl">
+
+							<f:selectItem itemLabel="Select Gender" itemValue="" />
+
+							<f:selectItem itemLabel="Male" itemValue="M" />
+
+							<f:selectItem itemLabel="Female" itemValue="F" />
+
+						</h:selectOneMenu>
+					</div>
+
+					<p:messages id="employeeMessages" showDetail="true" closable="true" />
+
+					<div class="flex items-center gap-4 flex-wrap">
+						<p:commandButton value="Save Employee" action="#{emp.addEmployee}"
+							ajax="false"
+							style="background:#4ade80;color:black;border:2px solid black;"
+							styleClass="w-full md:w-56 rounded-2xl
+                       transition-transform duration-300
+                       hover:scale-[1.01] hover:shadow-md" />
+						<h:link outcome="forgotEmployeeId" value="Recover ID by email" styleClass="text-green-600 font-medium" />
+					</div>
+				</h:form>
+
+			</div>
+
+		</div>
+
+	</h:body>
+
+</f:view>
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:metadata>
+	<f:event type="preRenderView" listener="#{loginBean.ensureAdminLoggedIn}" />
+</f:metadata>
+
+<f:view contentType="text/html">
+	<h:head>
+		<title>Employee Dashboard</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+	</h:head>
+
+	<h:body class="bg-white min-h-screen overflow-auto p-4 md:p-6">
+
+		<div class="min-h-full flex flex-col gap-6">
+
+			<div
+				class="border-2 border-green-400 rounded-3xl md:rounded-full bg-white shadow-lg
+                   px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4">
+
+				<div class="text-xl md:text-2xl font-semibold text-green-600">Hello,
+					#{loginBean.displayName}</div>
+
+				<div class="flex flex-wrap justify-center items-center gap-4 md:gap-8 text-base md:text-lg">
+
+					<h:link outcome="showEmployees" value="Show Employees"
+						styleClass="hover:text-green-600 transition-colors" />
+
+					<h:link outcome="addemp" value="Add Employee"
+						styleClass="hover:text-green-600 transition-colors" />
+
+					<h:form prependId="false">
+						<p:commandButton value="Logout" action="#{loginBean.logout}"
+							ajax="false" process="@this"
+							style="background:#4ade80;color:black;border:2px solid black;"
+							styleClass="rounded-full px-5 py-2
+                                   transition-transform duration-300 hover:scale-105" />
+					</h:form>
+
+				</div>
+
+			</div>
+
+	
+			<div class="flex flex-col lg:flex-row gap-6 flex-1">
+
+			
+				<div
+					class="flex-[2] border-2 border-green-400 rounded-[30px] md:rounded-[40px]
+                       shadow-lg p-6 md:p-10 bg-white
+                       transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+
+					<h1 class="text-2xl md:text-3xl font-bold text-green-600 mb-6">Employee
+						Management System</h1>
+
+					<p class="text-base md:text-lg md:leading-8 text-gray-700">Welcome to the
+						Employee Management Dashboard. This portal allows administrators
+						to manage employee information efficiently from a single
+						interface.</p>
+
+					<div class="mt-8 space-y-4 text-gray-600 text-sm md:text-base">
+						<p>• Add new employees to the database.</p>
+						<p>• View all registered employee records.</p>
+						<p>• Maintain organized employee information.</p>
+						<p>• Access management features quickly.</p>
+					</div>
+
+				</div>
+
+			
+				<div
+					class="w-full lg:w-[420px] border-2 border-green-400 rounded-[30px] md:rounded-[40px]
+                       shadow-lg p-6 md:p-8 bg-white
+                       transition-all duration-300 hover:scale-[1.01] hover:shadow-xl">
+
+					<h2 class="text-xl md:text-2xl font-bold text-green-600 text-center mb-8">
+						Instructions</h2>
+
+					<ul class="space-y-4 md:space-y-5 text-gray-700 text-sm md:text-base">
+						<li>1. Use "Add Employee" to create records.</li>
+						<li>2. Use "Show Employees" to view all entries.</li>
+						<li>3. Verify employee information before saving.</li>
+						<li>4. Keep records updated regularly.</li>
+						<li>5. Logout after completing your work.</li>
+					</ul>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</h:body>
+</f:view>
+</html>
