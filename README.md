@@ -3,4 +3,4 @@
 # Builded with java server faces JSF
 
 
-> Note : Project is discontinude on 26 july 2026 
+> Note : Project is discontinued on 26 july 2026 
