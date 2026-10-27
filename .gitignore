@@ -1,40 +1,6 @@
-# Build output
-/build/
-/target/
-/bin/
-/out/
-*.class
-*.jar
-*.war
-
-# IDE / workspace metadata
-.project
-.classpath
-.settings/
-.metadata/
-.idea/
-.vscode/
-Servers/
-wtpwebapps/
-*.iml
-
-# Local config / secrets
+node_modules
+.next
+.env.local
 .env
-.env.*
-*.local
-src/main/webapp/WEB-INF/smtp.properties
-src/main/webapp/WEB-INF/admin.properties
-docker-compose.override.yml
-Dockerfile
-docker-compose.yml
-DEPLOYMENT_AWS.md
-
-# Logs and temp files
-*.log
-*.tmp
-*.swp
-*.swo
-
-# OS files
+npm-debug.log*
 .DS_Store
-Thumbs.db
