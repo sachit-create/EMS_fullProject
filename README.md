@@ -3,4 +3,4 @@
 # Builded with java server faces JSF
 
 
-> Note : Project is discontinued on 26 july 2026 
+> Note : Rebuilding with ai features again, it will be an modern employee management system
