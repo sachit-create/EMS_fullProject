@@ -1,28 +1,22 @@
 const { validateAdminToken } = require('@/lib/auth');
+const { generateEmployeeSummary } = require('@/lib/ai');
 
 export async function POST(request) {
+  if (!validateAdminToken(request.headers.get('authorization') || '')) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
-    const userInput = (body.username || '').trim();
-    const password = (body.password || '').trim();
+    const employee = body.employee || {};
 
-    const isAdminUser = userInput === 'admin' || userInput === 'admin@home.dev';
-    const isValidPassword = password === 'admin123';
-
-    if (!isAdminUser || !isValidPassword) {
-      return Response.json({ message: 'Invalid admin credentials' }, { status: 401 });
+    if (!employee.name || !employee.email) {
+      return Response.json({ message: 'Employee details are required for summary generation.' }, { status: 400 });
     }
 
-    return Response.json({
-      message: 'Login successful',
-      user: {
-        username: 'admin',
-        email: 'admin@home.dev',
-        fullName: 'System Admin',
-      },
-      token: 'ems-admin-local-token',
-    });
+    const summary = await generateEmployeeSummary(employee);
+    return Response.json({ summary });
   } catch (error) {
-    return Response.json({ message: 'Login failed' }, { status: 500 });
+    return Response.json({ message: error.message || 'Summary generation failed' }, { status: 500 });
   }
 }

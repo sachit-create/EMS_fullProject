@@ -1,23 +1,29 @@
-const { db } = require('@/lib/db');
-const { validateAdminToken } = require('@/lib/auth');
-const { generateEmployeeSummary } = require('@/lib/ai');
+# Employee Management System
 
-export async function POST(request) {
-  if (!validateAdminToken(request.headers.get('authorization') || '')) {
-    return Response.json({ message: 'Unauthorized' }, { status: 401 });
-  }
+A first useful version of the project designed for Vercel-friendly deployment.
 
-  try {
-    const body = await request.json();
-    const employee = body.employee || {};
+Features:
+- React frontend with admin login
+- employee CRUD dashboard
+- seeded employee data
+- AI summary generation using Ollama-compatible endpoint
+- Vercel-ready app structure with in-memory demo store for first deployment
 
-    if (!employee.name || !employee.email) {
-      return Response.json({ message: 'Employee details are required for summary generation' }, { status: 400 });
-    }
+Default admin login:
+- Username: admin
+- Password: admin123
+- Email: admin@home.dev
 
-    const summary = await generateEmployeeSummary(employee);
-    return Response.json({ summary });
-  } catch (error) {
-    return Response.json({ message: error.message || 'Summary generation failed' }, { status: 500 });
-  }
-}
+Local run:
+```bash
+npm install
+npm run dev
+```
+
+Open:
+http://localhost:3000
+
+Vercel deployment:
+- Deploy this repository to Vercel
+- Set environment vars if needed for future hosted database or Ollama endpoint
+- The first version is built to run without a local database or native modules, making it easier to deploy on Vercel

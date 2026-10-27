@@ -1,54 +1,56 @@
-const { db } = require('@/lib/db');
-const { validateAdminToken, normalizeEmployeePayload, buildEmployeeFromRow } = require('@/lib/auth');
+const { getEmployees, buildEmployeeFromRow, updateEmployee, deleteEmployee } = require('@/lib/db');
+const { validateAdminToken, normalizeEmployeePayload } = require('@/lib/auth');
 
 function parseAuthHeader(request) {
   return request.headers.get('authorization') || '';
 }
 
-export async function GET(request) {
+export async function GET(request, { params }) {
   if (!validateAdminToken(parseAuthHeader(request))) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const rows = db.prepare('SELECT * FROM employees ORDER BY created_at DESC').all();
-  return Response.json({ employees: rows.map(buildEmployeeFromRow) });
+  const employees = getEmployees();
+  const employee = employees.find((item) => Number(item.id) === Number(params.id));
+
+  if (!employee) {
+    return Response.json({ message: 'Employee not found' }, { status: 404 });
+  }
+
+  return Response.json({ employee: buildEmployeeFromRow(employee) });
 }
 
-export async function POST(request) {
+export async function PUT(request, { params }) {
   if (!validateAdminToken(parseAuthHeader(request))) {
     return Response.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
   try {
-    const payload = await request.json();
-    const normalized = normalizeEmployeePayload(payload);
+    const payload = normalizeEmployeePayload(await request.json());
+    const employee = updateEmployee(Number(params.id), payload);
 
-    if (!normalized.name || !normalized.fatherName || !normalized.email) {
-      return Response.json({ message: 'Name, father name and email are required.' }, { status: 400 });
+    if (!employee) {
+      return Response.json({ message: 'Employee not found' }, { status: 404 });
     }
 
-    const code = normalized.employeeCode || `EMP-${String((db.prepare('SELECT COUNT(*) AS total FROM employees').get().total || 0) + 1).padStart(4, '0')}`;
-
-    const insert = db.prepare(`
-      INSERT INTO employees (employee_code, name, father_name, email, gender, salary, department, designation, photo_data_url)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const result = insert.run(
-      code,
-      normalized.name,
-      normalized.fatherName,
-      normalized.email,
-      normalized.gender,
-      normalized.salary,
-      normalized.department,
-      normalized.designation,
-      normalized.photoDataUrl
-    );
-
-    const created = db.prepare('SELECT * FROM employees WHERE id = ?').get(result.lastInsertRowid);
-    return Response.json({ message: 'Employee created successfully', employee: buildEmployeeFromRow(created) }, { status: 201 });
+    return Response.json({ message: 'Employee updated successfully', employee: buildEmployeeFromRow(employee) });
   } catch (error) {
-    return Response.json({ message: error.message || 'Could not create employee' }, { status: 500 });
+    return Response.json({ message: error.message || 'Could not update employee' }, { status: 500 });
   }
+}
+
+export async function DELETE(request, { params }) {
+  if (!validateAdminToken(parseAuthHeader(request))) {
+    return Response.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const employees = getEmployees();
+  const found = employees.find((item) => Number(item.id) === Number(params.id));
+
+  if (!found) {
+    return Response.json({ message: 'Employee not found' }, { status: 404 });
+  }
+
+  deleteEmployee(Number(params.id));
+  return Response.json({ message: 'Employee deleted successfully' });
 }
