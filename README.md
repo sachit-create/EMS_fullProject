@@ -1,6 +1,7 @@
-## This is an employee management system.
+> A Basic Crud based Employee management system website builded with java jsf library and ready to run on eclipse it includes basic employee management with admin access
+> 
+- Admin page
+- Employee page
+- Ai Summary
 
-# Builded with java server faces JSF
-
-
-> Note : Rebuilding with ai features again, it will be an modern employee management system
+> Thanks For Reading.
